@@ -14,8 +14,8 @@ class ObjetivoRoutes {
         this.router.post('/', objetivo_controller_1.default.create);
         this.router.post('/bulk', objetivo_controller_1.default.bulkCreate);
         this.router.post('/:id/asociar', objetivo_controller_1.default.asociar);
+        this.router.post('/list', objetivo_controller_1.default.readAll);
         this.router.get('/:id', objetivo_controller_1.default.readOne);
-        this.router.get('/', objetivo_controller_1.default.readAll);
         this.router.get('/:id/asociado', objetivo_controller_1.default.asociado);
         this.router.put('/', objetivo_controller_1.default.update);
         this.router.delete('/:id', objetivo_controller_1.default.delete);

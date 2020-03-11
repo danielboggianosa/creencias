@@ -80,7 +80,27 @@ class ObjetivoController{
     
     //READ ALL
     public async readAll(req:Request, res:Response): Promise<void>{
-        await Objetivo.findAll()
+        const {page, size, field, order, value, attributes} = req.body;
+        const { Op } = require('sequelize');
+        var where=null;
+        if(value){
+          where = {
+            [Op.or]: [
+                { id: { [Op.substring]: value } },
+                { nombre: { [Op.substring]: value } },
+                { apellido: { [Op.substring]: value } },
+                { correo: { [Op.substring]: value } }
+              ]
+          }
+        }
+        let total = await Objetivo.count({where});
+        await Objetivo.findAll({
+            attributes: attributes,
+            where,
+            order:[ [field, order] ],
+            offset: page, 
+            limit: size
+        })
         .then((objetivo: any)=>{
             res.json({
                 success:true, 

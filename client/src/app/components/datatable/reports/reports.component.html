@@ -1,0 +1,8 @@
+<button class="btn btn-primary btn-icon-split btn-sm d-inline mx-2" title="Download actual view as CSV file" (click)="downloadCsv()">
+    <span class="icon text-white-50">
+      <i class="fas fa-download"></i>
+    </span>
+    <span class="text">CSV</span>
+</button>
+
+<angular2csv [data]="newData" filename="csvFileName" [options]="options" #angular2Csv class="d-none"></angular2csv>

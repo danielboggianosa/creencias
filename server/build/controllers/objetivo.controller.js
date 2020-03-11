@@ -95,7 +95,27 @@ class ObjetivoController {
     //READ ALL
     readAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield objetivo_1.default.findAll()
+            const { page, size, field, order, value, attributes } = req.body;
+            const { Op } = require('sequelize');
+            var where = null;
+            if (value) {
+                where = {
+                    [Op.or]: [
+                        { id: { [Op.substring]: value } },
+                        { nombre: { [Op.substring]: value } },
+                        { apellido: { [Op.substring]: value } },
+                        { correo: { [Op.substring]: value } }
+                    ]
+                };
+            }
+            let total = yield objetivo_1.default.count({ where });
+            yield objetivo_1.default.findAll({
+                attributes: attributes,
+                where,
+                order: [[field, order]],
+                offset: page,
+                limit: size
+            })
                 .then((objetivo) => {
                 res.json({
                     success: true,

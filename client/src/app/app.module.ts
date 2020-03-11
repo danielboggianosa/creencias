@@ -10,6 +10,8 @@ import { ObjetivoCrearComponent } from './components/objetivo/objetivo-crear/obj
 import { LayoutModule } from './components/layout/layout.module';
 import { PublicPagesModule } from './components/public/public.module';
 import { ObjetivoAsociarComponent } from './components/objetivo/objetivo-asociar/objetivo-asociar.component';
+import { DataTableModule } from './components/datatable/datatable.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { ObjetivoAsociarComponent } from './components/objetivo/objetivo-asociar
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
-    PublicPagesModule
+    PublicPagesModule,
+    DataTableModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
