@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Servidor para Aplicación de Creencias",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon build/index.js",
+    "build": "tsc -w"
+  },
+  "author": "Daniel Boggiano",
+  "license": "MIT",
+  "dependencies": {
+    "@types/bluebird": "^3.5.30",
+    "@types/validator": "^12.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.3",
+    "@types/morgan": "^1.9.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2"
+  }
+}
