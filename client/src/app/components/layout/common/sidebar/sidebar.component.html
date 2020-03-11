@@ -1,0 +1,58 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion h-100" id="accordionSidebar" #accordionSidebar>
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/dashboard">
+      <div class="sidebar-brand-icon rotate-n-15">
+        <i class="fab fa-angular"></i>
+      </div>
+      <div class="sidebar-brand-text mx-3">{{webTitle}} <sup>{{webTitleSup}}</sup></div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <div *ngFor="let group of menuGroups" id="group_{{group.id}}">
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        {{group.title}}
+      </div>
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item" *ngFor="let menu of group.menu" id="item_{{menu.id}}">
+        <!-- MENU SIN SUBMENU -->
+        <div *ngIf="menu.link!=''">  
+          <a class="nav-link" routerLink="{{menu.link}}">
+            <i class="{{menu.icon}}"></i>
+            <span>{{menu.title}}</span>
+          </a>
+        </div>
+        
+        <!-- MENU CON SUBMENU -->
+        <div *ngIf="menu.link==''" id="menu_{{menu.id}}">          
+          <a class="nav-link collapsed" id="menu_name_{{menu.id}}" data-toggle="collapse" (click)="toggleSubmenu(group.id, menu.id)" style="cursor: pointer;">
+            <i class="{{menu.icon}}"></i>
+            <span>{{menu.title}}</span>
+          </a>
+          <!-- LISTA DE SUBMENUES -->
+          <div id="submenu_{{menu.id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">{{menu.subtitle}}:</h6>
+              <a class="collapse-item"*ngFor="let submenu of menu.submenu" routerLink="{{submenu.link}}" (click)="toggleSubmenu(group.id, menu.id)">{{submenu.title}}</a>
+            </div>
+          </div>
+        </div>
+
+
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+    </div>
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline" (click)="toggle()">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+  </ul>
+  <!-- End of Sidebar -->

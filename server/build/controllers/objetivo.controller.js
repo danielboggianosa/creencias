@@ -42,7 +42,8 @@ class ObjetivoController {
     //ASOCIAR OBJETIVOS CON CREENCIAS
     asociar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id, Creencias } = req.body;
+            const { id } = req.params;
+            const { Creencias } = req.body;
             yield objetivo_1.default.findOne({ where: { id } })
                 .then((objetivo) => {
                 objetivo.addCreencias(Creencias)
@@ -115,7 +116,7 @@ class ObjetivoController {
     asociado(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield objetivo_1.default.findAll({ where: { id }, include: [{ model: creencia_1.default, as: 'Creencias' }] })
+            yield objetivo_1.default.findOne({ where: { id }, include: [{ model: creencia_1.default, as: 'Creencias' }] })
                 .then((objetivo) => {
                 res.json({
                     success: true,

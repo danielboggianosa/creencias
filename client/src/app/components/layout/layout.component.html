@@ -1,0 +1,24 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <app-sidebar #sidebar></app-sidebar>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <app-topbar (sideBar)="toggleSideBar()"></app-topbar>
+            <!-- Begin Page Content -->
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+  
+          </div>
+          <!-- /.container-fluid -->
+
+          <app-footer></app-footer>
+        </div>
+    </div>
+     <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>

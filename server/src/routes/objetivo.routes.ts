@@ -11,7 +11,7 @@ class ObjetivoRoutes{
     config(){
         this.router.post('/', objetivoController.create)
         this.router.post('/bulk', objetivoController.bulkCreate)
-        this.router.post('/asociar', objetivoController.asociar)
+        this.router.post('/:id/asociar', objetivoController.asociar)
         this.router.get('/:id', objetivoController.readOne)
         this.router.get('/', objetivoController.readAll)
         this.router.get('/:id/asociado', objetivoController.asociado)

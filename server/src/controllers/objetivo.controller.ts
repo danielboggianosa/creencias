@@ -29,7 +29,8 @@ class ObjetivoController{
 
     //ASOCIAR OBJETIVOS CON CREENCIAS
     public async asociar(req:Request, res:Response): Promise<void>{
-        const {id, Creencias} = req.body
+        const {id} = req.params
+        const {Creencias} = req.body
         await Objetivo.findOne({where:{id}})
         .then((objetivo: any)=>{
             objetivo.addCreencias(Creencias)
@@ -99,7 +100,7 @@ class ObjetivoController{
     //READ ALL WITH ASOCIATIONS
     public async asociado(req:Request, res:Response): Promise<void>{
         const {id} = req.params
-        await Objetivo.findAll({where:{id},include:[{model: Creencia, as: 'Creencias'}]})
+        await Objetivo.findOne({where:{id},include:[{model: Creencia, as: 'Creencias'}]})
         .then((objetivo: any)=>{
             res.json({
                 success:true, 
