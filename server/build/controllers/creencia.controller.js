@@ -34,6 +34,26 @@ class CreenciaController {
             });
         });
     }
+    //CREATE BULK
+    bulkCreate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield creencia_1.default.bulkCreate(req.body)
+                .then((creencias) => {
+                res.json({
+                    success: true,
+                    message: 'Creencias creadas correctamente',
+                    data: creencias
+                });
+            })
+                .catch((error) => {
+                res.json({
+                    success: false,
+                    message: 'Hubo un problema al crear',
+                    error: error
+                });
+            });
+        });
+    }
     //READ ONE
     readOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -100,7 +120,7 @@ class CreenciaController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield creencia_1.default.delete({ where: { id } })
+            yield creencia_1.default.destroy({ where: { id } })
                 .then((creencia) => {
                 res.json({
                     success: true,

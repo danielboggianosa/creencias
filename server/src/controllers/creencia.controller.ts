@@ -22,6 +22,25 @@ class CreenciaController{
             })
         })
     }
+
+    //CREATE BULK
+    public async bulkCreate(req:Request, res:Response): Promise<void>{
+        await Creencia.bulkCreate(req.body)
+        .then((creencias: any)=>{
+            res.json({
+                success: true, 
+                message: 'Creencias creadas correctamente', 
+                data: creencias
+            });
+        })
+        .catch((error: any)=>{
+            res.json({
+                success:false, 
+                message: 'Hubo un problema al crear', 
+                error: error
+            })
+        })
+    }
     
     //READ ONE
     public async readOne(req:Request, res:Response): Promise<void>{
@@ -85,7 +104,7 @@ class CreenciaController{
     //DELTE
     public async delete(req:Request, res:Response): Promise<void>{
         const { id } = req.params
-        await Creencia.delete({where: {id}})
+        await Creencia.destroy({where: {id}})
         .then((creencia: any)=>{
             res.json({
                 success:true, 

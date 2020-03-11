@@ -10,6 +10,7 @@ class ObjetivoRoutes{
 
     config(){
         this.router.post('/', objetivoController.create)
+        this.router.post('/bulk', objetivoController.bulkCreate)
         this.router.post('/asociar', objetivoController.asociar)
         this.router.get('/:id', objetivoController.readOne)
         this.router.get('/', objetivoController.readAll)

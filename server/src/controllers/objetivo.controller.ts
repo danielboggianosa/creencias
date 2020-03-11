@@ -9,7 +9,18 @@ class ObjetivoController{
     public async create(req:Request, res:Response): Promise<void>{
         await Objetivo.create(req.body)
         .then((objetivo: any)=>{
-            res.json({success: true, message: 'Objetivo creada correctamente', data: objetivo});
+            res.json({success: true, message: 'Objetivo creado correctamente', data: objetivo});
+        })
+        .catch((error: any)=>{
+            res.json({success:false, message: 'Hubo un problema al crear', error: error})
+        })
+    }
+    
+    //CREATE BULK
+    public async bulkCreate(req:Request, res:Response): Promise<void>{
+        await Objetivo.bulkCreate(req.body)
+        .then((objetivo: any)=>{
+            res.json({success: true, message: 'Objetivos creados correctamente', data: objetivo});
         })
         .catch((error: any)=>{
             res.json({success:false, message: 'Hubo un problema al crear', error: error})
@@ -128,7 +139,7 @@ class ObjetivoController{
     //DELTE
     public async delete(req:Request, res:Response): Promise<void>{
         const { id } = req.params
-        await Objetivo.delete({where: {id}})
+        await Objetivo.destroy({where: {id}})
         .then((objetivo: any)=>{
             res.json({
                 success:true, 

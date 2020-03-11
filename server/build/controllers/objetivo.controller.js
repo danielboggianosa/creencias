@@ -20,7 +20,19 @@ class ObjetivoController {
         return __awaiter(this, void 0, void 0, function* () {
             yield objetivo_1.default.create(req.body)
                 .then((objetivo) => {
-                res.json({ success: true, message: 'Objetivo creada correctamente', data: objetivo });
+                res.json({ success: true, message: 'Objetivo creado correctamente', data: objetivo });
+            })
+                .catch((error) => {
+                res.json({ success: false, message: 'Hubo un problema al crear', error: error });
+            });
+        });
+    }
+    //CREATE BULK
+    bulkCreate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield objetivo_1.default.bulkCreate(req.body)
+                .then((objetivo) => {
+                res.json({ success: true, message: 'Objetivos creados correctamente', data: objetivo });
             })
                 .catch((error) => {
                 res.json({ success: false, message: 'Hubo un problema al crear', error: error });
@@ -145,7 +157,7 @@ class ObjetivoController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield objetivo_1.default.delete({ where: { id } })
+            yield objetivo_1.default.destroy({ where: { id } })
                 .then((objetivo) => {
                 res.json({
                     success: true,

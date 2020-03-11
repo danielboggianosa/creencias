@@ -12,6 +12,7 @@ class CreenciaRoutes {
     }
     config() {
         this.router.post('/', creencia_controller_1.default.create);
+        this.router.post('/bulk', creencia_controller_1.default.bulkCreate);
         this.router.get('/:id', creencia_controller_1.default.readOne);
         this.router.get('/', creencia_controller_1.default.readAll);
         this.router.put('/:id', creencia_controller_1.default.update);

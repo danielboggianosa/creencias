@@ -10,6 +10,7 @@ class CreenciaRoutes{
 
     config(){
         this.router.post('/', creenciaController.create)
+        this.router.post('/bulk', creenciaController.bulkCreate)
         this.router.get('/:id', creenciaController.readOne)
         this.router.get('/', creenciaController.readAll)
         this.router.put('/:id', creenciaController.update)
