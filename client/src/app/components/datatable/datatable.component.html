@@ -9,7 +9,7 @@
 
         <div class="card-title">
             <!-- SEARCH BUTTON -->
-            <form class=" d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" (submit)="searchData()">
+            <form class=" d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" (submit)="searchData()" *ngIf="SearchForm">
                 <div class="input-group">
                 <input type="text" class="form-control bg-light border-0 small" placeholder="Filtrar..." aria-label="Search" aria-describedby="basic-addon2" name="filterValue" [(ngModel)]="filterValue">
                 <div class="input-group-append">
@@ -19,8 +19,18 @@
                 </div>
                 </div>
             </form>            
-            <app-filter-columns [columns]="tableColumns" (loadColumns)="loadColumns($event)"></app-filter-columns>
-            <app-reports *ngIf="dataSource" [columns]="tableColumns" [data]="csvData"></app-reports>
+            <!-- FILTROS DE COLUMNAS -->
+            <app-filter-columns 
+            [columns]="tableColumns" 
+            (loadColumns)="loadColumns($event)" 
+            *ngIf="FilterColumns">
+            </app-filter-columns>
+            <!-- DESCARGAR REPORTE -->
+            <app-reports 
+            *ngIf="dataSource && DownloadReport" 
+            [columns]="tableColumns" 
+            [data]="csvData">
+        </app-reports>
         </div>
 
         <div class="d-none d-sm-block" style="max-height: 500px; overflow-y: scroll;">
@@ -32,14 +42,36 @@
                             <span *ngIf="['options','createdAt','updatedAt','deletedAt'].indexOf(col.key) == -1">{{ element[col.key] }}</span>
                             <span *ngIf="['options','createdAt','updatedAt','deletedAt'].indexOf(col.key) > -1">{{ element[col.key] }}</span>
                             <span *ngIf="col.key=='options'">
-                                <button class="btn btn-danger btn-circle btn-sm m-1" (click)="delete(element.id)"><i class="fa fa-trash"></i></button>
-                                <button class="btn btn-primary btn-circle btn-sm m-1" (click)="edit(element.id)"><i class="fa fa-edit"></i></button>
+                                <button 
+                                *ngIf="col.options.delete"
+                                class="btn btn-danger btn-circle btn-sm m-1" 
+                                (click)="delete(element.id)"
+                                title="Borrar">
+                                <i class="fa fa-trash"></i></button>
+                                <button 
+                                *ngIf="col.options.edit"
+                                class="btn btn-primary btn-circle btn-sm m-1" 
+                                (click)="edit(element.id)"
+                                title="Editar">
+                                <i class="fa fa-edit"></i></button>
+                                <button 
+                                *ngIf="col.options.select"
+                                class="btn btn-success btn-circle btn-sm m-1" 
+                                (click)="select(element)"
+                                title="Seleccionar">
+                                <i class="fa fa-check"></i></button>
+                                <button 
+                                *ngIf="col.options.unselect"
+                                class="btn btn-secondary btn-circle btn-sm m-1" 
+                                (click)="select(element)"
+                                title="Deseleccionar">
+                                <i class="fa fa-times"></i></button>
                             </span>
                         </td>
                     </ng-container>
                 </div>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'table-info':selectedRows.indexOf(row.id)>-1}"></tr>
             </table>
         </div>
 
@@ -65,6 +97,8 @@
                   </span>
                     <button class="btn btn-danger btn-sm m-1" (click)="delete(data.id)"><i class="fa fa-trash"></i> Delete</button>
                     <button class="btn btn-primary btn-sm m-1" (click)="edit(data.id)"><i class="fa fa-edit"></i> Edit</button>
+                    <button class="btn btn-success btn-sm m-1" (click)="edit(data.id)"><i class="fa fa-check"></i> Select</button>
+                    <button class="btn btn-secondary btn-sm m-1" (click)="edit(data.id)"><i class="fa fa-times"></i> Unselect</button>
                 </mat-expansion-panel>
               </mat-accordion>
         </div>
@@ -72,6 +106,7 @@
 
     <div class="card-footer">
         <app-paginator
+        *ngIf="Pagination"
         [pageSize]="pageSize"
         [totalRows]="totalRows"
         [pageSizeOptions]="[10,20,50,100]"

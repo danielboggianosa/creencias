@@ -4,7 +4,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/dashboard">
       <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fab fa-angular"></i>
+        <i class="fas fa-heartbeat"></i>
       </div>
       <div class="sidebar-brand-text mx-3">{{webTitle}} <sup>{{webTitleSup}}</sup></div>
     </a>
@@ -34,7 +34,7 @@
             <span>{{menu.title}}</span>
           </a>
           <!-- LISTA DE SUBMENUES -->
-          <div id="submenu_{{menu.id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div id="submenu_{{menu.id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="z-index: 2000;">
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">{{menu.subtitle}}:</h6>
               <a class="collapse-item"*ngFor="let submenu of menu.submenu" routerLink="{{submenu.link}}" (click)="toggleSubmenu(group.id, menu.id)">{{submenu.title}}</a>

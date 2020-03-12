@@ -11,18 +11,30 @@ import 'moment/locale/es-us';
 })
 export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   subs = new SubSink
-  @Input() tableColumns:Array<{id:string, key:string, title:string,   visible:boolean}>;  
+  @Input() tableColumns:Array<{id:string, key:string, title:string,   visible:boolean, options:{delete:boolean,edit:boolean,select:boolean,unselect:boolean}}>;  
   @Input() dataSource;
   @Input() csvData;
   @Input() cardTitle:string;  
   @Input() pageSize:number=10;
   @Input() totalRows: number;
-  @Input() filterValue:any;
+  @Input() filterValue:string;
   @Input() field:string = 'id';
   @Input() order:string = 'asc';
+
+  // Selectores de ADDONS
+  @Input() SearchForm = true;
+  @Input() FilterColumns = true;
+  @Input() DownloadReport = true;
+  @Input() Pagination = true;
+
+  // Cambiar clase según selección
+  @Input() selectedRows:Array<number>=[]
+
+
   @Output() getData = new EventEmitter<any>();
   @Output() deleteData = new EventEmitter<any>();
   @Output() updateData = new EventEmitter<any>();
+  @Output() selectData = new EventEmitter<any>();
   // ARMADO DINÁMICO DE LA TABLA
   // title: corresponde al título que tendrá cada columna
   // key: es el identificador de la tabla que contiene el valor (propiedad)
@@ -58,9 +70,15 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(){
     this.displayedColumns = this.tableColumns.map(c => c.id);
     this.attributes = this.tableColumns.filter(c => c.visible && c.id!='0').map(m=>m.key);
+    this.evaluateRows()
+  }
+
+  evaluateRows(){
+    console.log(this.selectedRows)
   }
 
   loadSize(e){
+    this.pageSize = e;
     this.loadData({size: e});
   }
 
@@ -69,6 +87,7 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   loadColumns(e){
+    this.attributes = e;
     this.loadData({attributes:e});
   }
 
@@ -90,6 +109,10 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
       this.order = e.direction;
       this.loadData({field:this.field, order:this.order})
     }
+  }
+
+  select(e){
+    this.selectData.emit(e);
   }
 
 

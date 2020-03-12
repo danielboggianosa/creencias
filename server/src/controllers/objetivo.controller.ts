@@ -30,10 +30,10 @@ class ObjetivoController{
     //ASOCIAR OBJETIVOS CON CREENCIAS
     public async asociar(req:Request, res:Response): Promise<void>{
         const {id} = req.params
-        const {Creencias} = req.body
+        const {creencias} = req.body
         await Objetivo.findOne({where:{id}})
         .then((objetivo: any)=>{
-            objetivo.addCreencias(Creencias)
+            objetivo.addCreencias(creencias)
             .then((ob: any)=>{
                 res.json({
                     success:true,
@@ -163,7 +163,7 @@ class ObjetivoController{
         .then((objetivo: any)=>{
             res.json({
                 success:true, 
-                message: 'Objetivo borrada',
+                message: 'Objetivo borrado',
                 data: objetivo
             });
         })

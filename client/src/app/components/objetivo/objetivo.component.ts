@@ -25,7 +25,7 @@ export class ObjetivoComponent implements OnInit, OnDestroy {
     {id:'2', key:'objetivo',  title:'OBJETIVO', visible:true},
     {id:'3', key:'createdAt', title:'CREADO',   visible:true},
     {id:'4', key:'updatedAt', title:'ACTUALIZADO',   visible:false},
-    {id:'0', key:'options',   title:'OPTIONS',  visible:true},
+    {id:'0', key:'options',   title:'OPTIONS',  visible:true, options:{delete:true,edit:true,select:false,unselect:false}},
   ]
 
   constructor(private objetivoService:ObjetivoService) { }
@@ -39,19 +39,19 @@ export class ObjetivoComponent implements OnInit, OnDestroy {
   }
 
   loadData(e:{page,size,field,order,value,attributes}){
-    // console.log(e);
+    this.setValues(e)
+    const {page,size,value,attributes,field,order} = e
     let body={
-      page:(e.page) ? +e.page : 0,
-      size: (e.size) ? +e.size : +this.pageSize,
-      field: (e.field) ? e.field : this.field,
-      order: (e.order) ? e.order : this.order,
-      value: (e.value) ? e.value : this.filterValue,
-      attributes: (e.attributes) ? e.attributes : this.attributes
+      page: (page) ? +page : 0,
+      size: (size) ? +size : +this.pageSize,
+      field: (field) ? field : this.field,
+      order: (order) ? order : this.order,
+      value: (value) ? value : this.filterValue,
+      attributes: (attributes) ? attributes : this.attributes
     }
     this.subs.sink = this.objetivoService.listar(body).subscribe(
       res=>{
         this.csvData = res['data'];
-        // console.log(this.csvData);
         this.totalRows = (res['total']);
         this.dataSource = new MatTableDataSource(res['data']);
         this.dataSource.data.forEach(d => {
@@ -63,8 +63,20 @@ export class ObjetivoComponent implements OnInit, OnDestroy {
     )
   }
 
+  setValues(e){
+    const {size,value,attributes,field,order} = e
+    this.field = (field) ? field : this.field
+    this.filterValue = (value) ? value : this.filterValue
+    this.pageSize = (size) ? size : this.pageSize
+    this.attributes = (attributes) ? attributes : this.attributes
+    this.order = (order) ? order : this.order
+  }
+
   delete(e){
-    console.log(e)
+    this.subs.sink = this.objetivoService.borrar(e).subscribe(res=>{
+      alert(res['message']);
+      this.loadData({page:null,size:null,field:null,order:null,value:null,attributes:null});
+    })
   }
 
   update(e){

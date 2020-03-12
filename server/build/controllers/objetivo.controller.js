@@ -43,10 +43,10 @@ class ObjetivoController {
     asociar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const { Creencias } = req.body;
+            const { creencias } = req.body;
             yield objetivo_1.default.findOne({ where: { id } })
                 .then((objetivo) => {
-                objetivo.addCreencias(Creencias)
+                objetivo.addCreencias(creencias)
                     .then((ob) => {
                     res.json({
                         success: true,
@@ -181,7 +181,7 @@ class ObjetivoController {
                 .then((objetivo) => {
                 res.json({
                     success: true,
-                    message: 'Objetivo borrada',
+                    message: 'Objetivo borrado',
                     data: objetivo
                 });
             })
