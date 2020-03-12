@@ -6,11 +6,14 @@ import { ObjetivoCrearComponent } from './components/objetivo/objetivo-crear/obj
 import { CreenciaCrearComponent } from './components/creencia/creencia-crear/creencia-crear.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ObjetivoAsociarComponent } from './components/objetivo/objetivo-asociar/objetivo-asociar.component';
+import { LoginComponent } from './components/public/login/login.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  {path: 'dashboard', component: LayoutComponent,
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
+  {path: 'dashboard', component: LayoutComponent, canActivate: [AuthGuardService],
   children:[
     {path: '', redirectTo: 'objetivos', pathMatch: 'full'},
     {path: 'objetivos', component: ObjetivoComponent},

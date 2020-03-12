@@ -28,4 +28,12 @@ export class AuthService {
     return this.http.post(this.api_url+"reset", usuario);
   }
 
+  public isAuthenticated(): boolean {
+    const token = sessionStorage.getItem('user.nombre');
+    if(token)
+      return true
+    else 
+      return false;
+  }
+
 }

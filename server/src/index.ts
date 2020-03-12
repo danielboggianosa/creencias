@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import objetivoRoutes from './routes/objetivo.routes';
 import creenciaRoutes from './routes/creencia.routes';
+import authRoutes from './routes/auth.routes'
 import db_init from './database/setup';
 
 class Server {
@@ -28,6 +29,7 @@ class Server {
     routes():void{
         this.app.use('/api/objetivo', objetivoRoutes);
         this.app.use('/api/creencia', creenciaRoutes);
+        this.app.use('/api/auth', authRoutes);
     }
 
     start():void{

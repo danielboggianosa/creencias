@@ -1,9 +1,10 @@
 import sequelize from './connection';
 import Creencia from '../models/creencia'
 import Objetivo from '../models/objetivo';
+import Usuario from '../models/usuario';
 
 // LLAMADO DE MODELO PARA CREACIÓN
-
+Usuario;
 // CONFIGURACIÓN DE ASOCIACIONES
 Objetivo.belongsToMany(Creencia, {
     through: "objetivos_creencias",

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-info',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserInfoComponent implements OnInit {
 
-  constructor() { }
+  user:any
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
+    this.user={
+      nombre:sessionStorage.getItem('user.nombre'),
+      apellido:sessionStorage.getItem('user.apellido'),
+      imagen:sessionStorage.getItem('user.imagen'),
+      correo:sessionStorage.getItem('user.correo'),
+    }
+  }
+
+  logout(){
+    sessionStorage.clear();
+    this.router.navigateByUrl('/login')
   }
 
 }

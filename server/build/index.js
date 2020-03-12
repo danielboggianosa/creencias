@@ -8,6 +8,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const objetivo_routes_1 = __importDefault(require("./routes/objetivo.routes"));
 const creencia_routes_1 = __importDefault(require("./routes/creencia.routes"));
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const setup_1 = __importDefault(require("./database/setup"));
 class Server {
     constructor() {
@@ -26,6 +27,7 @@ class Server {
     routes() {
         this.app.use('/api/objetivo', objetivo_routes_1.default);
         this.app.use('/api/creencia', creencia_routes_1.default);
+        this.app.use('/api/auth', auth_routes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => console.log('Servidor en el puerto', this.app.get('port')));

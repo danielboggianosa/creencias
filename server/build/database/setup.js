@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const connection_1 = __importDefault(require("./connection"));
 const creencia_1 = __importDefault(require("../models/creencia"));
 const objetivo_1 = __importDefault(require("../models/objetivo"));
+const usuario_1 = __importDefault(require("../models/usuario"));
 // LLAMADO DE MODELO PARA CREACIÓN
+usuario_1.default;
 // CONFIGURACIÓN DE ASOCIACIONES
 objetivo_1.default.belongsToMany(creencia_1.default, {
     through: "objetivos_creencias",

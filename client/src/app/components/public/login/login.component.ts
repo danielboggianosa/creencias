@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('validando');
     this.subs.sink = this.authService.login(this.usuario).subscribe(
       res=>{
-        if(res['msg']=="autorizado"){
+        if(res['success']){
           sessionStorage.setItem('user.nombre', res['user'].nombre)
           sessionStorage.setItem('user.apellido', res['user'].apellido)
           sessionStorage.setItem('user.correo', res['user'].correo)
