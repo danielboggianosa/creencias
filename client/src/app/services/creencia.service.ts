@@ -21,8 +21,8 @@ export class CreenciaService {
     return this.http.post(this.api_url+'bulk', creencias)
   }
 
-  listar(){
-    return this.http.get(this.api_url)
+  listar(body){
+    return this.http.post(this.api_url+'list', body)
   }
 
   ver(id){

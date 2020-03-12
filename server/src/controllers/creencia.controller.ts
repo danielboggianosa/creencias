@@ -64,11 +64,30 @@ class CreenciaController{
     
     //READ ALL
     public async readAll(req:Request, res:Response): Promise<void>{
-        await Creencia.findAll()
+        const {page, size, field, order, value, attributes} = req.body;
+        const { Op } = require('sequelize');
+        var where=null;
+        if(value){
+          where = {
+            [Op.or]: [
+                { id: { [Op.substring]: value } },
+                { creencia: { [Op.substring]: value } }                
+              ]
+          }
+        }
+        let total = await Creencia.count({where});
+        await Creencia.findAll({
+            attributes: attributes,
+            where,
+            order:[ [field, order] ],
+            offset: page, 
+            limit: size
+        })
         .then((creencia: any)=>{
             res.json({
                 success:true, 
                 message: 'Creencias encontradas',
+                total: total,
                 data: creencia
             });
         })
@@ -101,7 +120,7 @@ class CreenciaController{
         })
     }
     
-    //DELTE
+    //DELETE
     public async delete(req:Request, res:Response): Promise<void>{
         const { id } = req.params
         await Creencia.destroy({where: {id}})

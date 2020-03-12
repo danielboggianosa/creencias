@@ -23,7 +23,7 @@ export class ObjetivoService {
   }
 
   listar(body){
-    return this.http.post(this.api_url+'/list', body)
+    return this.http.post(this.api_url+'list', body)
   }
 
   ver(id){

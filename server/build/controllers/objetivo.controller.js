@@ -102,9 +102,7 @@ class ObjetivoController {
                 where = {
                     [Op.or]: [
                         { id: { [Op.substring]: value } },
-                        { nombre: { [Op.substring]: value } },
-                        { apellido: { [Op.substring]: value } },
-                        { correo: { [Op.substring]: value } }
+                        { objetivo: { [Op.substring]: value } }
                     ]
                 };
             }
@@ -120,6 +118,7 @@ class ObjetivoController {
                 res.json({
                     success: true,
                     message: 'Objetivos encontrados',
+                    total: total,
                     data: objetivo
                 });
             })

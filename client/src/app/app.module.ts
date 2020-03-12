@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,11 +11,18 @@ import { ObjetivoCrearComponent } from './components/objetivo/objetivo-crear/obj
 import { LayoutModule } from './components/layout/layout.module';
 import { PublicPagesModule } from './components/public/public.module';
 import { ObjetivoAsociarComponent } from './components/objetivo/objetivo-asociar/objetivo-asociar.component';
-import { DataTableModule } from './components/datatable/datatable.module';
+// import { DataTableModule } from './components/datatable/datatable.module';
 import { FormsModule } from '@angular/forms';
 import { FormsComponent } from './components/forms/forms.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DataTableComponent } from './components/datatable/datatable.component';
+import { Angular2CsvModule } from 'angular2-csv';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FilterColumnsComponent } from './components/datatable/filter-columns/filter-columns.component';
+import { PaginatorComponent } from './components/datatable/paginator/paginator.component';
+import { ReportsComponent } from './components/datatable/reports/reports.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -25,16 +33,24 @@ import { DataTableComponent } from './components/datatable/datatable.component';
     ObjetivoCrearComponent,
     ObjetivoAsociarComponent,
     FormsComponent,
+    FilterColumnsComponent,
+    PaginatorComponent,
+    ReportsComponent,
     DataTableComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     LayoutModule,
     PublicPagesModule,
-    DataTableModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    Angular2CsvModule,
+    MatTableModule,
+    MatExpansionModule,
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

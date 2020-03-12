@@ -1,1 +1,17 @@
-<p>creencia works!</p>
+<h1>Creencias</h1>
+<p>Revisa la lista de Creencias</p>
+
+<app-data-table
+[tableColumns]="tableColumns"
+[dataSource]="dataSource"
+[csvData]="csvData"
+[cardTitle]="cardTitle"
+[pageSize]="pageSize"
+[totalRows]="totalRows"
+[filterValue]="filterValue"
+[field]="field"
+[order]="order"
+(getData)="loadData($event)"
+(deleteData)="delete($event)"
+(updateData)="update($event)"
+></app-data-table>

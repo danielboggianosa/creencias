@@ -1,4 +1,17 @@
 <h1>Objetivos</h1>
 <p>Revisa la lista de Objetivos</p>
 
-<app-data-table></app-data-table>
+<app-data-table
+[tableColumns]="tableColumns"
+[dataSource]="dataSource"
+[csvData]="csvData"
+[cardTitle]="cardTitle"
+[pageSize]="pageSize"
+[totalRows]="totalRows"
+[filterValue]="filterValue"
+[field]="field"
+[order]="order"
+(getData)="loadData($event)"
+(deleteData)="delete($event)"
+(updateData)="update($event)"
+></app-data-table>

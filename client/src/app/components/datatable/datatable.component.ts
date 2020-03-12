@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { SubSink } from 'subsink';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from 'src/app/services/user.service';
-import * as moment from 'moment';
 import 'moment/locale/es-us';
 
 @Component({
@@ -10,19 +9,24 @@ import 'moment/locale/es-us';
   templateUrl: './datatable.component.html',
   styles: []
 })
-export class DataTableComponent implements OnInit, OnDestroy {
+export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   subs = new SubSink
+  @Input() tableColumns:Array<{id:string, key:string, title:string,   visible:boolean}>;  
   @Input() dataSource;
-  csvData;
-  @Input() cardTitle="Users";
-  @Input() pageTitle="Tables";
-  @Input() pageDescription="Para visualizar la data en esta tabla debes conectarte a un backend o a través de un servicio que traiga los datos. Revisa las instrucciones en los comentarios del código para mayor información";
-  
+  @Input() csvData;
+  @Input() cardTitle:string;  
+  @Input() pageSize:number=10;
+  @Input() totalRows: number;
+  @Input() filterValue:any;
+  @Input() field:string = 'id';
+  @Input() order:string = 'asc';
+  @Output() getData = new EventEmitter<any>();
+  @Output() deleteData = new EventEmitter<any>();
+  @Output() updateData = new EventEmitter<any>();
   // ARMADO DINÁMICO DE LA TABLA
   // title: corresponde al título que tendrá cada columna
   // key: es el identificador de la tabla que contiene el valor (propiedad)
-  @Input() tableColumns=[
-    {id:'1', key:'id',        title:'ID',       visible:true},
+    /* {id:'1', key:'id',        title:'ID',       visible:true},
     {id:'2', key:'nombre',    title:'NOMBRE',   visible:true},
     {id:'3', key:'apellido',  title:'APELLIDO', visible:true},
     {id:'4', key:'correo',    title:'CORREO',   visible:true},
@@ -32,15 +36,9 @@ export class DataTableComponent implements OnInit, OnDestroy {
     {id:'8', key:'createdAt', title:'CREADO',   visible:true},
     {id:'9', key:'updatedAt', title:'ACTUALIZADO',   visible:false},
     {id:'10', key:'deletedAt', title:'BORRADO',   visible:false},
-    {id:'0', key:'options',   title:'OPTIONS',  visible:true},
-  ];
-  displayedColumns = this.tableColumns.map(c => c.id);
-  attributes = this.tableColumns.filter(c => c.visible && c.id!='0').map(m=>m.key);
-  pageSize:number=10;
-  totalRows: number;
-  filterValue:any;
-  field:string = 'id';
-  order:string = 'asc';
+    {id:'0', key:'options',   title:'OPTIONS',  visible:true}, */
+  attributes: any;
+  displayedColumns: string[];
 
   constructor(private userService:UserService){}
 
@@ -53,63 +51,47 @@ export class DataTableComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  loadData(page=null, value=null, field=null, order=null, attributes=null){
-    let body={
-      page:(page) ? +page : 0,
-      size: +this.pageSize,
-      field: (field) ? field : this.field,
-      order: (order) ? order : this.order,
-      value: (value) ? value : this.filterValue,
-      attributes: (attributes) ? attributes : this.attributes
-    }
-    this.subs.sink = this.userService.getUsers(body).subscribe(
-      res=>{
-        this.csvData = res['data'];
-        console.log(this.csvData);
-        this.totalRows = (res['total']);
-        this.dataSource = new MatTableDataSource(res['data']);
-        this.dataSource.data.forEach(d => {
-          d.createdAt = moment(d.createdAt).fromNow();
-          d.updatedAt = moment(d.updatedAt).fromNow();
-          d.deletedAt = moment(d.deletedAt).fromNow();
-        });
-      }
-    )
+  loadData(e){
+    this.getData.emit(e);
+  }
+
+  ngOnChanges(){
+    this.displayedColumns = this.tableColumns.map(c => c.id);
+    this.attributes = this.tableColumns.filter(c => c.visible && c.id!='0').map(m=>m.key);
   }
 
   loadSize(e){
-    this.pageSize = e;
-    this.loadData();
+    this.loadData({size: e});
+  }
+
+  loadPage(e){
+    this.loadData({page: e});
   }
 
   loadColumns(e){
-    this.attributes = e;
-    this.loadData();
+    this.loadData({attributes:e});
   }
 
+  searchData(){
+    this.loadData({value:this.filterValue})
+  }
+  
   delete(id){
-    let del = confirm("¿Do you really want to delete this entry?")
-    if(del){
-      this.subs.sink = this.userService.deleteUser(id).subscribe(
-        res=>{
-          alert(res['message']);
-          this.loadData();
-        }
-      )
-    }
+    this.deleteData.emit(id);
   }
 
   edit(id){
-    
+    this.updateData.emit(id);
   }
 
   sortData(e){
-    if(e.active != 6){
+    if(e.active != 0){
       this.field = this.tableColumns.filter(c=>c.id==e.active)[0].key
       this.order = e.direction;
-      this.loadData(0, null, this.field, this.order)
+      this.loadData({field:this.field, order:this.order})
     }
   }
+
 
 
 

@@ -78,11 +78,30 @@ class CreenciaController {
     //READ ALL
     readAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield creencia_1.default.findAll()
+            const { page, size, field, order, value, attributes } = req.body;
+            const { Op } = require('sequelize');
+            var where = null;
+            if (value) {
+                where = {
+                    [Op.or]: [
+                        { id: { [Op.substring]: value } },
+                        { creencia: { [Op.substring]: value } }
+                    ]
+                };
+            }
+            let total = yield creencia_1.default.count({ where });
+            yield creencia_1.default.findAll({
+                attributes: attributes,
+                where,
+                order: [[field, order]],
+                offset: page,
+                limit: size
+            })
                 .then((creencia) => {
                 res.json({
                     success: true,
                     message: 'Creencias encontradas',
+                    total: total,
                     data: creencia
                 });
             })
@@ -116,7 +135,7 @@ class CreenciaController {
             });
         });
     }
-    //DELTE
+    //DELETE
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
