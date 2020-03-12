@@ -1,0 +1,40 @@
+<form class="user row" (submit)="submitAction()">
+    <div *ngFor="let campo of myFormFields" class="{{campo.class}}">
+        <label for="{{campo.name}}" class="form-control-label  mx-2">{{campo.label}}</label>
+        <span *ngIf="campo.tag=='input'">
+            <span *ngIf="['text','email','password','date','time','number'].indexOf(campo.type) > -1">
+                <input type="{{campo.type}}" class="form-control form-control-user" name="{{campo.name}}" id="{{campo.name}}" placeholder="{{campo.placeholder}}" required="{{campo.required}}" [(ngModel)]="myForm[campo.name]"> 
+            </span>
+            <span *ngIf="campo.type=='radio'">
+                <label *ngFor="let o of campo.options" style="cursor: pointer;">
+                    <input type="radio" name="{{campo.name}}" value="{{o.value}}" class="d-inline mx-2" required="{{campo.required}}" [(ngModel)]="myForm[campo.name]">{{o.text}}
+                </label>
+            </span>
+            <span *ngIf="campo.type=='checkbox'">
+                <span *ngFor="let o of campo.options" >
+                    <input type="checkbox" name="{{o.value}}" id="{{o.value}}" value="{{o.value}}" class="custom-control-input" required="{{campo.required}}" [(ngModel)]="myForm[campo.name][o.value]">
+                    <label for="{{o.value}}" class="custom-control-label d-inline-block mx-4">{{o.text}}</label>
+                </span>
+            </span>
+            <span *ngIf="campo.type=='file' || campo.type=='image'">
+                <input type="file" name="{{campo.name}}" id="{{campo.name}}" class="d-none" required="{{campo.required}}" [(ngModel)]="myForm[campo.name]">
+                <label for="{{campo.name}}" class="btn btn-primary btn-icon-split w-100 d-flex justify-content-start" style="cursor: pointer;">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="text">{{campo.placeholder}}</span>
+                </label>
+            </span>
+        </span>
+        <span *ngIf="campo.tag=='select'">
+            <select name="{{campo.name}}" id="{{campo.name}}" class="form-control d-md-inline" required="{{campo.required}}" [(ngModel)]="myForm[campo.name]">
+                <option *ngFor="let o of campo.options" value="{{o.value}}">{{o.text}}</option>
+            </select>
+        </span>
+        <span *ngIf="campo.tag=='textarea'">
+            <textarea name="{{campo.name}}" id="{{campo.name}}" cols="30" rows="5" class="form-control" placeholder="{{campo.placeholder}}" required="{{campo.required}}" [(ngModel)]="myForm[campo.name]"></textarea>
+        </span>
+        <p *ngIf="error[campo.id]" class="text text-danger text-small ml-2">{{error[campo.id]}}</p>
+    </div>
+    <button type="submit" class="btn btn-success m-auto">Enviar Datos</button>
+</form>

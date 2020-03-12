@@ -1,1 +1,24 @@
-<p>creencia-crear works!</p>
+<h1>Crear Creencias</h1>
+<p>Elije la forma en la que deseas crear tus Creencias</p>
+
+<div class="row">
+    
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header"><h6 class="m-0 font-weight-bold text-primary">Crear uno por uno</h6></div>
+            <div class="card-body">
+                <app-forms [myForm]="myForm" [myFormFields]="myFormFields" (sendForm)="crearUno($event)" #form></app-forms>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header"><h6 class="m-0 font-weight-bold text-primary">Crear en lotes</h6></div>
+            <div class="card-body">
+                <app-forms [myForm]="myForm2" [myFormFields]="myFormFields2" (sendForm)="crearVarios($event)" #form2></app-forms>
+            </div>
+        </div>
+    </div>
+
+</div>

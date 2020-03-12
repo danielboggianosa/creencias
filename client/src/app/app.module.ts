@@ -12,6 +12,9 @@ import { PublicPagesModule } from './components/public/public.module';
 import { ObjetivoAsociarComponent } from './components/objetivo/objetivo-asociar/objetivo-asociar.component';
 import { DataTableModule } from './components/datatable/datatable.module';
 import { FormsModule } from '@angular/forms';
+import { FormsComponent } from './components/forms/forms.component';
+import { HttpClientModule } from '@angular/common/http';
+import { DataTableComponent } from './components/datatable/datatable.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,9 @@ import { FormsModule } from '@angular/forms';
     CreenciaComponent,
     CreenciaCrearComponent,
     ObjetivoCrearComponent,
-    ObjetivoAsociarComponent
+    ObjetivoAsociarComponent,
+    FormsComponent,
+    DataTableComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +33,8 @@ import { FormsModule } from '@angular/forms';
     LayoutModule,
     PublicPagesModule,
     DataTableModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
