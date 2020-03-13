@@ -1,36 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ServerService } from './server.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
+  headers = {headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer '+localStorage.getItem('token'))};
   api_url
 
   constructor(private api:ServerService, private http:HttpClient) {
     this.api_url = api.API_URI+'users';
   }
 
-  registraUsuario(usuario){
-    return this.http.post(this.api_url, usuario);
-  }
-
-  login(usuario){
-    return this.http.post(this.api_url+"/authenticate", usuario);
-  }
-
   getUsers(body){
-    return this.http.post(this.api_url+'/get',body)
+    return this.http.post(this.api_url+'/get',body, this.headers)
   }
 
   getFiltered(body){
-    return this.http.post(this.api_url+'/filtered',body)
+    return this.http.post(this.api_url+'/filtered',body, this.headers)
   }
 
   deleteUser(id){
-    return this.http.delete(this.api_url+'/'+id);
+    return this.http.delete(this.api_url+'/'+id, this.headers);
   }
 
 }

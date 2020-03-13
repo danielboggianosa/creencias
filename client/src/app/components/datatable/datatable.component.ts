@@ -70,11 +70,6 @@ export class DataTableComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(){
     this.displayedColumns = this.tableColumns.map(c => c.id);
     this.attributes = this.tableColumns.filter(c => c.visible && c.id!='0').map(m=>m.key);
-    this.evaluateRows()
-  }
-
-  evaluateRows(){
-    console.log(this.selectedRows)
   }
 
   loadSize(e){

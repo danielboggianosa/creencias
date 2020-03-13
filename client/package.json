@@ -24,6 +24,7 @@
     "@angular/router": "~9.0.3",
     "@ng-bootstrap/ng-bootstrap": "^6.0.0",
     "angular2-csv": "^0.2.9",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "rxjs": "~6.5.4",
     "subsink": "^1.0.1",

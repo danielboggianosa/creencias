@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user-info',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 export class UserInfoComponent implements OnInit {
 
   user:any
-  constructor(private router:Router) { }
+  constructor(private router:Router, private auth:AuthService) { }
 
   ngOnInit(): void {
     this.user={
@@ -21,8 +22,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   logout(){
-    sessionStorage.clear();
-    this.router.navigateByUrl('/login')
+    this.auth.sessionDestroy()
   }
 
 }

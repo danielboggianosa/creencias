@@ -1,15 +1,26 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, OnDestroy } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ServerService } from './server.service';
+import decode from 'jwt-decode'
+import { Router } from '@angular/router';
+import { SubSink } from 'subsink';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
+  subs = new SubSink
   api_url;
+  token = localStorage.getItem('token')
+  tokenPayLoad = decode(this.token)
+  headers = {headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer '+ this.token)};
 
-  constructor(private http:HttpClient, private api:ServerService) {
+  constructor(private http:HttpClient, private api:ServerService, private router:Router) {
     this.api_url = api.API_URI+'auth/';
+  }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
   }
   
   login(usuario){
@@ -25,15 +36,40 @@ export class AuthService {
   }
 
   reset(usuario){
-    return this.http.post(this.api_url+"reset", usuario);
+    return this.http.post(this.api_url+"reset", usuario)
   }
 
-  public isAuthenticated(): boolean {
-    const token = sessionStorage.getItem('user.nombre');
-    if(token)
+  public isTokenValid():boolean {
+    if(this.tokenPayLoad.iat < this.tokenPayLoad.exp)
       return true
-    else 
-      return false;
+    else
+      return false
+  }
+
+  public sessionSet(token){
+    let headers = {headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token)};
+    this.subs.sink = this.http.get(this.api_url+'validate', headers).subscribe(
+      res=> {
+        if(res){
+            localStorage.setItem('token', token)
+            let tokenPayLoad = decode(token)
+            sessionStorage.setItem('user.nombre', tokenPayLoad.nombre)
+            sessionStorage.setItem('user.apellido', tokenPayLoad.apellido)
+            sessionStorage.setItem('user.correo', tokenPayLoad.correo)
+            sessionStorage.setItem('user.imagen', tokenPayLoad.imagen)
+            sessionStorage.setItem('user.rol', tokenPayLoad.rol)
+            this.router.navigate(['/dashboard']);
+        }
+        else this.router.navigate(['/login']);
+      }
+    )
+
+  }
+
+  public sessionDestroy(){
+    localStorage.clear();
+    sessionStorage.clear();    
+    this.router.navigate(['/login']);
   }
 
 }

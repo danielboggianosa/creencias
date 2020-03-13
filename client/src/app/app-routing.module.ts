@@ -8,20 +8,21 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { ObjetivoAsociarComponent } from './components/objetivo/objetivo-asociar/objetivo-asociar.component';
 import { LoginComponent } from './components/public/login/login.component';
 import { AuthGuardService } from './services/auth-guard.service';
+import { UnknownComponent } from './components/public/unknown/unknown.component';
 
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
-  {path: 'dashboard', component: LayoutComponent, canActivate: [AuthGuardService],
-  children:[
-    {path: '', redirectTo: 'objetivos', pathMatch: 'full'},
-    {path: 'objetivos', component: ObjetivoComponent},
+  {path: 'dashboard', component: LayoutComponent, canActivate: [AuthGuardService], canActivateChild:[AuthGuardService], children:[
+    {path: '', redirectTo: 'objetivos/ver', pathMatch: 'full'},
+    {path: 'objetivos/ver', component: ObjetivoComponent},
     {path: 'objetivos/crear', component: ObjetivoCrearComponent},
     {path: 'objetivos/asociar', component: ObjetivoAsociarComponent},
     {path: 'creencias', component: CreenciaComponent},
     {path: 'creencias/crear', component: CreenciaCrearComponent},
   ]},
+  {path: '**', component: UnknownComponent},
 ];
 
 @NgModule({

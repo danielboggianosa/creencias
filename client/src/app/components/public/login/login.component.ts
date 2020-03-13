@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SubSink } from 'subsink';
-import { UserService } from 'src/app/services/user.service';
-import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -31,16 +30,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subs.sink = this.authService.login(this.usuario).subscribe(
       res=>{
         if(res['success']){
-          sessionStorage.setItem('user.nombre', res['user'].nombre)
-          sessionStorage.setItem('user.apellido', res['user'].apellido)
-          sessionStorage.setItem('user.correo', res['user'].correo)
-          sessionStorage.setItem('user.imagen', res['user'].imagen)
-          if(sessionStorage.getItem('user.correo'))
-            this.router.navigateByUrl('/dashboard');
+          this.authService.sessionSet(res['token'])
         } 
         else
-          this.loginMessage = res['msg'];
-
+          this.loginMessage = res['message'];
       }
     )
     this.loginForm.nativeElement.reset();

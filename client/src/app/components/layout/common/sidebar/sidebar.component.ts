@@ -16,7 +16,7 @@ export class SidebarComponent implements OnInit {
     ]},
     {id: 2, title: 'Interface', permission:'', menu:[
       {id:2, title: 'Objetivos', icon:'fas fa-fw fa-bullseye', link: '', permission:'', subtitle: 'Acciones', submenu:[
-        {id:3, title:'Ver', link:'', permission:''},
+        {id:3, title:'Ver', link:'objetivos/ver', permission:''},
         {id:4, title:'Crear', link:'objetivos/crear', permission:'' },
         {id:6, title:'Asociar', link:'objetivos/asociar', permission:'' },
       ]},
