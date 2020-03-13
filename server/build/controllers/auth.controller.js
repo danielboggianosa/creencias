@@ -13,7 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const usuario_1 = __importDefault(require("../models/usuario"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const crypto_middleware_1 = __importDefault(require("../middlewares/crypto.middleware."));
+const token_middleware_1 = __importDefault(require("../middlewares/token.middleware"));
 // import mailSender from '../middlewares/mail.sender';
 class AuthController {
     //LOGIN 1
@@ -23,56 +24,64 @@ class AuthController {
             yield usuario_1.default.findOne({ where: { correo } })
                 .then((user) => {
                 if (user) {
-                    bcrypt_1.default.compare(password, user.dataValues.password, (err, result) => {
-                        if (result)
+                    crypto_middleware_1.default.comparar(password, user.dataValues.password)
+                        .then((result) => {
+                        const usuario = {
+                            nombre: user.dataValues.nombre,
+                            apellido: user.dataValues.apellido,
+                            correo: user.dataValues.correo,
+                            imagen: user.dataValues.imagen,
+                            rol: user.dataValues.rol
+                        };
+                        token_middleware_1.default.generar(usuario)
+                            .then(token => {
                             res.json({
                                 success: true,
-                                message: "autorizado",
-                                user: {
-                                    nombre: user.dataValues.nombre, apellido: user.dataValues.apellido, correo: user.dataValues.correo, imagen: user.dataValues.imagen
-                                }
+                                message: 'autorizado',
+                                token: token
                             });
-                        else
-                            res.json({ msg: "correo o password incorrecto" });
-                    });
+                        })
+                            .catch((err) => res.json({ success: false, message: err }));
+                    })
+                        .catch(() => res.json({ success: false, message: 'correo o contraseña no coinciden' }));
                 }
                 else
-                    res.json({ msg: "correo no registrado" });
+                    res.json({ success: false, message: "usuario no registrado" });
             })
-                .catch((err) => res.json(err));
+                .catch((err) => res.json({ success: false, message: err }));
         });
     }
     // REGISTER USER 1
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { nombre, apellido, correo, password, imagen } = req.body;
-            yield bcrypt_1.default.hash(password, 10, (err, hash) => {
-                if (hash) {
-                    var newUser = {
-                        nombre: nombre,
-                        apellido: apellido,
-                        correo: correo,
-                        password: hash,
-                        rol: 5,
-                        imagen: "http://138.197.196.196/api/imagenes/18.jpg"
-                    };
-                    usuario_1.default.create(newUser)
-                        .then((user) => {
-                        res.json({ msg: "Usuario Creado Correctamente", user: {
-                                id: user.id,
-                                nombre: user.nombre,
-                                apellido: user.apellido,
-                                correo: user.correo,
-                                rol: user.rol,
-                                imagen: user.imagen
-                            } });
-                    })
-                        .catch((error) => {
-                        res.json({ msg: error });
-                    });
-                }
-                if (err)
-                    throw err;
+            let newUser;
+            let token;
+            yield crypto_middleware_1.default.encriptar(password)
+                .then(hash => {
+                newUser = {
+                    nombre: nombre,
+                    apellido: apellido,
+                    correo: correo,
+                    password: hash,
+                    rol: 5,
+                    imagen: (imagen) ? imagen : "http://138.197.196.196/api/imagenes/18.jpg"
+                };
+            })
+                .catch(error => res.json({ success: false, message: error }));
+            yield usuario_1.default.create(newUser)
+                .then((user) => {
+                res.json({ success: true, message: "Usuario Creado Correctamente", user: {
+                        id: user.id,
+                        nombre: user.nombre,
+                        apellido: user.apellido,
+                        correo: user.correo,
+                        rol: user.rol,
+                        imagen: user.imagen
+                    } });
+            })
+                .catch((error) => {
+                res.json({ success: false, message: error });
             });
         });
     }
@@ -96,24 +105,26 @@ class AuthController {
     reset(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { correo, password } = req.body;
-            bcrypt_1.default.hash(password, 10, hash => {
-                usuario_1.default.update({ password: hash }, { where: { correo } })
-                    .then((user) => {
-                    if (user) {
-                        res.json({ success: true, user: {
-                                id: user.id,
-                                nombre: user.nombre,
-                                apellido: user.apellido,
-                                correo: user.correo,
-                                rol: user.rol,
-                                imagen: user.imagen
-                            } });
-                    }
-                    else
-                        res.json({ success: false, msg: "correo no registrado" });
-                })
-                    .catch((err) => console.log(err));
-            });
+            let hashed;
+            yield crypto_middleware_1.default.encriptar(password)
+                .then(hash => hashed = hash)
+                .catch(error => res.json({ success: false, message: error }));
+            yield usuario_1.default.update({ password: hashed }, { where: { correo } })
+                .then((user) => {
+                if (user) {
+                    res.json({ success: true, user: {
+                            id: user.id,
+                            nombre: user.nombre,
+                            apellido: user.apellido,
+                            correo: user.correo,
+                            rol: user.rol,
+                            imagen: user.imagen
+                        } });
+                }
+                else
+                    res.json({ success: false, msg: "correo no registrado" });
+            })
+                .catch((err) => console.log(err));
         });
     }
 }
