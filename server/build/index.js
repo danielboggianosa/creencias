@@ -30,7 +30,9 @@ class Server {
         this.app.use('/api/auth', auth_routes_1.default);
     }
     start() {
-        this.app.listen(this.app.get('port'), () => console.log('Servidor en el puerto', this.app.get('port')));
+        this.app.listen(this.app.get('port'), () => {
+            console.log('Servidor en el puerto', this.app.get('port'));
+        });
     }
     db_config() {
         setup_1.default;

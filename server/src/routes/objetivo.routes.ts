@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import objetivoController from '../controllers/objetivo.controller';
+import tokenSecure from '../middlewares/token.middleware';
 
 class ObjetivoRoutes{
     public router: Router = Router();
@@ -9,14 +10,14 @@ class ObjetivoRoutes{
     }
 
     config(){
-        this.router.post('/', objetivoController.create)
-        this.router.post('/bulk', objetivoController.bulkCreate)
-        this.router.post('/:id/asociar', objetivoController.asociar)
-        this.router.post('/list', objetivoController.readAll)
-        this.router.get('/:id', objetivoController.readOne)
-        this.router.get('/:id/asociado', objetivoController.asociado)
-        this.router.put('/', objetivoController.update)
-        this.router.delete('/:id', objetivoController.delete)
+        this.router.post('/', tokenSecure.proteger, objetivoController.create)
+        this.router.post('/bulk', tokenSecure.proteger, objetivoController.bulkCreate)
+        this.router.post('/:id/asociar', tokenSecure.proteger, objetivoController.asociar)
+        this.router.post('/list', tokenSecure.proteger, objetivoController.readAll)
+        this.router.get('/:id', tokenSecure.proteger, objetivoController.readOne)
+        this.router.get('/:id/asociado', tokenSecure.proteger, objetivoController.asociado)
+        this.router.put('/', tokenSecure.proteger, objetivoController.update)
+        this.router.delete('/:id', tokenSecure.proteger, objetivoController.delete)
     }
 }
 const objetivoRoutes = new ObjetivoRoutes();

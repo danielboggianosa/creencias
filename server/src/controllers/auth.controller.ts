@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Usuario from '../models/usuario';
 import cryptoSecure from '../middlewares/crypto.middleware.';
 import tokenSecure from '../middlewares/token.middleware';
-// import mailSender from '../middlewares/mail.sender';
+import mailSender from '../middlewares/mail.sender';
 
 class AuthController {
     
@@ -77,7 +77,7 @@ class AuthController {
     }
 
     // RECOVER PASSWORD
-    /* public async recover(req: Request, res: Response): Promise<void> {
+    public async recover(req: Request, res: Response): Promise<void> {
         const {correo} = req.body;
         await Usuario.findOne({where:{correo}})
             .then(
@@ -91,7 +91,7 @@ class AuthController {
                 }
             )
             .catch( (err: any) => console.log(err) )
-    } */
+    }
 
     // RESET PASSWORD
     public async reset(req: Request, res: Response): Promise<void> {
@@ -116,6 +116,11 @@ class AuthController {
                         res.json({success:false,msg: "correo no registrado"});
             })
             .catch( (err: any) => console.log(err) )
+    }
+
+    // VALIDAR TOKEN
+    public async validate(req: Request, res: Response): Promise<void>{
+        res.json(true)
     }
 
 }

@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const usuario_1 = __importDefault(require("../models/usuario"));
 const crypto_middleware_1 = __importDefault(require("../middlewares/crypto.middleware."));
 const token_middleware_1 = __importDefault(require("../middlewares/token.middleware"));
-// import mailSender from '../middlewares/mail.sender';
+const mail_sender_1 = __importDefault(require("../middlewares/mail.sender"));
 class AuthController {
     //LOGIN 1
     authenticate(req, res) {
@@ -86,21 +86,21 @@ class AuthController {
         });
     }
     // RECOVER PASSWORD
-    /* public async recover(req: Request, res: Response): Promise<void> {
-        const {correo} = req.body;
-        await Usuario.findOne({where:{correo}})
-            .then(
-                (user:any)=>{
-                    if(user){
-                        mailSender.recoverPass(correo);
-                        res.json({success:true,msg: "correo enviado con éxito"});
-                    }
-                    else
-                        res.json({success:false,msg: "correo no registrado"});
+    recover(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { correo } = req.body;
+            yield usuario_1.default.findOne({ where: { correo } })
+                .then((user) => {
+                if (user) {
+                    mail_sender_1.default.recoverPass(correo);
+                    res.json({ success: true, msg: "correo enviado con éxito" });
                 }
-            )
-            .catch( (err: any) => console.log(err) )
-    } */
+                else
+                    res.json({ success: false, msg: "correo no registrado" });
+            })
+                .catch((err) => console.log(err));
+        });
+    }
     // RESET PASSWORD
     reset(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -125,6 +125,12 @@ class AuthController {
                     res.json({ success: false, msg: "correo no registrado" });
             })
                 .catch((err) => console.log(err));
+        });
+    }
+    // VALIDAR TOKEN
+    validate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            res.json(true);
         });
     }
 }
