@@ -40,10 +40,14 @@ export class AuthService implements OnDestroy {
   public isTokenValid():boolean {
     let token = localStorage.getItem('token')
     let tokenPayLoad = decode(token)
-    if(tokenPayLoad.iat < tokenPayLoad.exp)
+    let now = new Date()
+    let exp = new Date(tokenPayLoad.exp*1000)
+    if(sessionStorage.getItem('user.id') && now < exp)
       return true
-    else
+    else{
+      this.sessionDestroy()
       return false
+    }
   }
 
   public sessionSet(token){
@@ -53,12 +57,16 @@ export class AuthService implements OnDestroy {
         if(res){
             localStorage.setItem('token', token)
             let tokenPayLoad = decode(token)
+            let iat = new Date(tokenPayLoad.iat*1000)
+            let exp = new Date(tokenPayLoad.exp*1000)
             sessionStorage.setItem('user.id', tokenPayLoad?.id)
             sessionStorage.setItem('user.nombre', tokenPayLoad?.nombre)
             sessionStorage.setItem('user.apellido', tokenPayLoad?.apellido)
             sessionStorage.setItem('user.correo', tokenPayLoad?.correo)
             sessionStorage.setItem('user.imagen', tokenPayLoad?.imagen)
             sessionStorage.setItem('user.rol', tokenPayLoad?.rol)
+            sessionStorage.setItem('token.iat', iat.toString())
+            sessionStorage.setItem('token.exp', exp.toString())
             if(sessionStorage.getItem('user.id')!=='undefined')
               this.router.navigate(['/dashboard']);
         }
