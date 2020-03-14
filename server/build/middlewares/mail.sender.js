@@ -25,7 +25,7 @@ class MailSender {
     }
     config() {
         this.transporter = nodemailer_1.default.createTransport({
-            host: "smtp.zoho.com",
+            host: env_1.default.mailServer.host,
             port: 587,
             secure: false,
             auth: {
@@ -50,7 +50,7 @@ class MailSender {
                     from: this.server.correo,
                     to: correo,
                     subject: 'Recuperar Contraseña',
-                    html: 'Hola, has solicitado recuperar tu contraseña. Para recuperarla ve al siguiente enlace: <a href="http://localhost:4200/reset/' + token + '">click aquí</a>',
+                    html: 'Hola, has solicitado recuperar tu contraseña. Para recuperarla ve al siguiente enlace: <a href="' + env_1.default.app_url + '/reset/' + token + '">click aquí</a>',
                 };
                 this.transporter.sendMail(message);
             });

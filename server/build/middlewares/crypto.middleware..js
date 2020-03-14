@@ -4,10 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const env_1 = __importDefault(require("../env"));
 class CryptoSecure {
     encriptar(password) {
         return new Promise((resolve, reject) => {
-            bcrypt_1.default.hash(password, 10, (err, hash) => {
+            bcrypt_1.default.hash(password, env_1.default.hash_rounds, (err, hash) => {
                 if (hash)
                     resolve(hash);
                 else
