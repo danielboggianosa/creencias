@@ -12,7 +12,8 @@ class TokenSecure {
     }
     generar(data) {
         return new Promise((resolve, reject) => {
-            const token = jsonwebtoken_1.default.sign(data, this.secret, { expiresIn: '5h' });
+            const secret = env_1.default.jwt_secret;
+            const token = jsonwebtoken_1.default.sign(data, secret, { expiresIn: '5h' });
             if (token)
                 resolve(token);
             else
@@ -20,10 +21,12 @@ class TokenSecure {
         });
     }
     proteger(req, res, next) {
+        const secret = env_1.default.jwt_secret;
         const bearerHeader = req.headers['authorization'];
+        console.log('my Secret', secret);
         if (typeof bearerHeader !== 'undefined') {
             const token = bearerHeader.split(' ')[1];
-            jsonwebtoken_1.default.verify(token, this.secret, (err, data) => {
+            jsonwebtoken_1.default.verify(token, secret, (err, data) => {
                 if (data)
                     next();
                 else

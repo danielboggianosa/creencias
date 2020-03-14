@@ -10,10 +10,8 @@ import { SubSink } from 'subsink';
 })
 export class AuthService implements OnDestroy {
   subs = new SubSink
-  api_url;
-  token = localStorage.getItem('token')
-  tokenPayLoad = decode(this.token)
-  headers = {headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer '+ this.token)};
+  api_url;  
+  headers = {headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer '+ localStorage.getItem('token'))};
 
   constructor(private http:HttpClient, private api:ServerService, private router:Router) {
     this.api_url = api.API_URI+'auth/';
@@ -40,7 +38,9 @@ export class AuthService implements OnDestroy {
   }
 
   public isTokenValid():boolean {
-    if(this.tokenPayLoad.iat < this.tokenPayLoad.exp)
+    let token = localStorage.getItem('token')
+    let tokenPayLoad = decode(token)
+    if(tokenPayLoad.iat < tokenPayLoad.exp)
       return true
     else
       return false

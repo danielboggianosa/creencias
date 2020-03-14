@@ -8,17 +8,20 @@ class TokenSecure {
 
     public generar(data:object){
         return new Promise((resolve,reject)=>{
-            const token = jwt.sign(data, this.secret, {expiresIn: '5h'});
+            const secret:string = env.jwt_secret 
+            const token = jwt.sign(data, secret, {expiresIn: '5h'});
             if(token) resolve(token)
             else reject('no se pudo generar el token')
         })
     }
 
     public proteger(req: Request, res: Response, next: NextFunction){
+        const secret:string = env.jwt_secret 
         const bearerHeader = req.headers['authorization'];
+        console.log('my Secret', secret)
         if( typeof bearerHeader !== 'undefined'){
             const token = bearerHeader.split(' ')[1]
-            jwt.verify(token, this.secret, (err,data)=>{
+            jwt.verify(token, secret, (err,data)=>{
                 if(data) next();
                 else res.sendStatus(403)
             })
