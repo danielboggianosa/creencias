@@ -29,6 +29,7 @@ export class LayoutComponent implements OnInit {
   
   public update(user:Usuario){
     this.user = user;
+    sessionStorage.setItem('user.imagen',user.imagen)
   }
 
 }
