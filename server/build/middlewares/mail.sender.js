@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -25,24 +34,27 @@ class MailSender {
             }
         });
         // verify connection configuration
-        this.transporter.verify(function (error, success) {
+        /* this.transporter.verify(function(error: any, success: any) {
             if (error) {
                 console.log(error);
-            }
-            else {
+            } else {
                 console.log("Server is ready to take our messages");
             }
-        });
+        }); */
     }
     recoverPass(correo) {
-        let token = token_middleware_1.default.generar({ correo });
-        let message = {
-            from: this.server.correo,
-            to: correo,
-            subject: 'Recuperar Contraseña',
-            text: 'Para recuperar ve al siguiente enlace: <a href="http://localhost:4200/reset/' + token + '">click aquí</a>',
-        };
-        this.transporter.sendMail(message);
+        return __awaiter(this, void 0, void 0, function* () {
+            yield token_middleware_1.default.generar({ correo })
+                .then(token => {
+                let message = {
+                    from: this.server.correo,
+                    to: correo,
+                    subject: 'Recuperar Contraseña',
+                    html: 'Hola, has solicitado recuperar tu contraseña. Para recuperarla ve al siguiente enlace: <a href="http://localhost:4200/reset/' + token + '">click aquí</a>',
+                };
+                this.transporter.sendMail(message);
+            });
+        });
     }
 }
 const mailSender = new MailSender();

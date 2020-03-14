@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { SubSink } from 'subsink';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/usuario.service';
 import 'moment/locale/es-us';
 
 @Component({

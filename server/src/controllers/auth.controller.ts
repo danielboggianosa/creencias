@@ -15,6 +15,7 @@ class AuthController {
                 cryptoSecure.comparar(password, user.dataValues.password)
                 .then((result)=>{
                     const usuario={
+                        id: user.dataValues.id, 
                         nombre: user.dataValues.nombre, 
                         apellido:user.dataValues.apellido, 
                         correo: user.dataValues.correo, 
@@ -47,7 +48,6 @@ class AuthController {
     public async register (req: Request, res: Response): Promise<any>{
         const {nombre, apellido, correo, password, imagen} = req.body;
         let newUser;
-        let token;
         await cryptoSecure.encriptar(password)
             .then(hash=>{
                 newUser = {
@@ -103,14 +103,10 @@ class AuthController {
         await Usuario.update({password: hashed}, { where:{correo} })
             .then((user:any)=>{
                     if(user){
-                        res.json({success:true, user: {
-                            id: user.id,
-                            nombre: user.nombre,
-                            apellido: user.apellido,
-                            correo: user.correo,
-                            rol: user.rol,
-                            imagen: user.imagen
-                        }});
+                        res.json({
+                            success:true, 
+                            message:'Contraseña cambiada con éxito, ahora inicia sesión'
+                        });
                     }
                     else
                         res.json({success:false,msg: "correo no registrado"});

@@ -13,8 +13,8 @@ class AuthRoutes {
     config(): void {
         this.router.post('/login', authController.authenticate);
         this.router.post('/register', authController.register);
-        this.router.post('/recover', tokenSecure.proteger, authController.recover);
-        this.router.post('/reset', authController.reset);
+        this.router.post('/recover', authController.recover);
+        this.router.post('/reset', tokenSecure.proteger, authController.reset);
         this.router.get('/validate', tokenSecure.proteger, authController.validate);
     }
 }

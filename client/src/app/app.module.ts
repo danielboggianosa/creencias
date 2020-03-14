@@ -23,6 +23,7 @@ import { FilterColumnsComponent } from './components/datatable/filter-columns/fi
 import { PaginatorComponent } from './components/datatable/paginator/paginator.component';
 import { ReportsComponent } from './components/datatable/reports/reports.component';
 import { MatSortModule } from '@angular/material/sort';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MatSortModule } from '@angular/material/sort';
     FilterColumnsComponent,
     PaginatorComponent,
     ReportsComponent,
-    DataTableComponent
+    DataTableComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

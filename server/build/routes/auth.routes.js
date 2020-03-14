@@ -14,8 +14,8 @@ class AuthRoutes {
     config() {
         this.router.post('/login', auth_controller_1.default.authenticate);
         this.router.post('/register', auth_controller_1.default.register);
-        this.router.post('/recover', token_middleware_1.default.proteger, auth_controller_1.default.recover);
-        this.router.post('/reset', auth_controller_1.default.reset);
+        this.router.post('/recover', auth_controller_1.default.recover);
+        this.router.post('/reset', token_middleware_1.default.proteger, auth_controller_1.default.reset);
         this.router.get('/validate', token_middleware_1.default.proteger, auth_controller_1.default.validate);
     }
 }

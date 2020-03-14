@@ -18,7 +18,6 @@ class TokenSecure {
     public proteger(req: Request, res: Response, next: NextFunction){
         const secret:string = env.jwt_secret 
         const bearerHeader = req.headers['authorization'];
-        console.log('my Secret', secret)
         if( typeof bearerHeader !== 'undefined'){
             const token = bearerHeader.split(' ')[1]
             jwt.verify(token, secret, (err,data)=>{

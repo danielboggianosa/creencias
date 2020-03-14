@@ -17,7 +17,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, OnDestro
   }
 
   canActivate(): boolean {
-    if(localStorage.getItem('token')){
+    if(localStorage.getItem('token') && sessionStorage.getItem('user.id')!=='undefined'){
       return this.auth.isTokenValid()
     }
     else{

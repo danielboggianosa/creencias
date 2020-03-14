@@ -6,43 +6,40 @@ import { Component, OnInit, ViewChild, Output, Input, EventEmitter } from '@angu
   styles: []
 })
 export class FormsComponent implements OnInit {
-  pageTitle="Forms";
-  pageDescription="DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the DataTables documentation";
-  cardTitle="Forms Example";
-
   // INICIO DEL FORMULARIO
   // DECLARE EACH ONE OF THE INPUT FIELDS YOU WILL BE RECEIVING FROM THE FORM
   /*
   La propiedad "myForm" es tanto la declaración de todos los campos como de los valores que se recibirán del formulario.
-  Esta es la variable que se pasará a ser validada y que guardará todos los valores recibidos.
-  También se pueden declarar los valores iniciales o por defecto en esta variable cambiando el valor null por el deseado
+  Esta es la variable que pasará a ser validada y que guardará todos los valores recibidos.
+  También se pueden declarar los valores iniciales o por defecto en esta variable cambiando el valor null por el deseado. Si tienes un objeto que almacena la data puedes pasar directamente ese objeto como myForm en las propiedades del app-forms en tu componente padre.
   */
   @Input() myForm={
-    nombre: null,
-    apellido: null,
-    correo: null,
-    telefono: null,
-    edad: null,
-    country: null,
-    tipoDocumento: null,
-    colores: {
+    nombre: null,         // Tipo Texto
+    apellido: null,       // tipo texto
+    correo: null,         // tipo texto
+    telefono: null,       // tipo texto
+    edad: null,           // tipo number
+    country: null,        // tipo select, las opciones van en la siguiente variable
+    tipoDocumento: null,  // tipo radio
+    colores: {            // tipo checkbox, solo para este tipo, es necesario declarar las posibles opciones
       rojo: null,
       azul: null,
       verde: null
     },
-    descripcion: null,
-    nacimiento: null,
-    archivo: null
+    descripcion: null,    // tipo textarea
+    nacimiento: null,     // tipo date
+    archivo: null         // tipo file
   };
-  //
   /*
   EXPLICACIÓN DE LA VARIABLE myFormFields
   
     id          => es un identificador único para cada campo en el formulario
     tag         => corresponde a la etiqueta HTML del campo, puede ser cualquier etiqueta de formulario válida en HTML5
+    class       => es la clase del contenedor del campo
     name        => nombre del campo que también servirá como identificacdor en el formulario
     type        => tipo de input según sea el caso
-    placeholder => es el mensaje que se muestra tanto en el campo como en la etiqueta LABEL
+    placeholder => es el mensaje que se muestra en el campo antes de ser llenado
+    label       => es el texto que se muestra tanto en la etiqueta LABEL
     required    => true si el campo es obligatorio y false si es opcional
     disabled    => indicador del campo si está habilitado o no,
     options     => si el campo es un tipo select o cualquier otro de opciones, estas se especifican dentro de este array
@@ -51,7 +48,7 @@ export class FormsComponent implements OnInit {
     options.text => etiqueta del campo o texto a mostrar en la opción
   */
   @Input() myFormFields=[
-    {id: 1, tag:'input', name:'nombre', type:'text', placeholder:'Nombre', required:true, disabled:false, options:[]},
+    {id: 1, tag:'input', class:'', name:'nombre', type:'text',label:'', placeholder:'Nombre', required:true, disabled:false, options:[]},
     {id: 2, tag:'input', name:'apellido', type:'text', placeholder:'Apellidos', required:true, disabled:false, options:[]},
     {id: 4, tag:'input', name:'telefono', type:'text', placeholder:'Teléfono', required:true, disabled:false, options:[]},
     {id: 3, tag:'input', name:'correo', type:'email', placeholder:'Correo', required:true, disabled:false, options:[]},
@@ -77,8 +74,15 @@ export class FormsComponent implements OnInit {
     {id: 21, tag:'input', name:'tiempo', type:'time', placeholder:'Tiempo', required:true, disabled:false, options:[]},
     {id: 18, tag:'textarea', name:'descripcion', type:'text', placeholder:'Descripción', required:true, disabled:false, options:[]},
   ];
-  @ViewChild('Formulario',{static:false}) Formulario;
+  // Envía la variable "myForm" con todos sus datos
   @Output() sendForm = new EventEmitter<any>();
+  // Envía el nombre del campo que ha cambiado, el valor lo obtiene por el data binding
+  @Output() myInputChange = new EventEmitter<any>();
+  // Recibe el texto que irá en el botón de "submit", por defecto es "Enviar Datos"
+  @Input() buttonText = 'Enviar Datos'
+
+
+  @ViewChild('Formulario',{static:false}) Formulario;
   error:Array<string>=[];
 
   // fin de propiedades del formulario
@@ -90,16 +94,26 @@ export class FormsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // EMITE EL NOMBRE DEL CAMPO QUE HA CAMBIADO
+  inputChange(e){    
+    for(let i=0; i<this.myFormFields.length; i++){
+      if(e == this.myFormFields[i].name && (this.myFormFields[i].type == 'file' || this.myFormFields[i].type == 'image')){
+        this.myFormFields[i].placeholder = this.myForm[e].split('\\')[2]
+        break;
+      }
+    }
+    this.myInputChange.emit(e)
+    // el valor correspondiente a este campo se obtiene con la siguiete variable => "this.myForm[a]"
+  }
+
   /* INICIO DE FUNCIONES DEL FORMULARIO */
   submitAction(){
-    this.myForm;
-
     // VALIDACIÓN
     if(this.validateFormFields(this.myForm, this.myFormFields)){
-      /* AQUÍ DEBE IR EL LLAMADO AL SERVICIO QUE GUARDA LA INFORMACIÓN DEL FORMULARIO */
+      /* AQUÍ SE ENVÍA LOS DATOS DEL FORMULARIO AL COMPONENTE PADRE */
       const newForm = this.myForm;
       this.sendForm.emit(newForm)
-      //RESETEAR EL FORMULARIO PARA NUEVOS DATOS
+      //RESETEAR EL FORMULARIO PARA NUEVOS DATOS, debe hacerse de preferencia desde el componente padre
       // this.Formulario.nativeElement.reset();
     }
     
@@ -107,7 +121,6 @@ export class FormsComponent implements OnInit {
 
   // ESTA FUNCION SE ENCARGA DE VALIDAR QUE TODOS LOS VALORES RECIBIDO ESTÉN CONFORME LO DECLARADO
   validateFormFields(myForm, myFormFields){
-    console.log(myForm.correo)
 
     let valid:boolean = true
     this.error=[];

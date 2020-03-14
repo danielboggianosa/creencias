@@ -25,25 +25,27 @@ class MailSender {
             }
         });
         // verify connection configuration
-        this.transporter.verify(function(error: any, success: any) {
+        /* this.transporter.verify(function(error: any, success: any) {
             if (error) {
                 console.log(error);
             } else {
                 console.log("Server is ready to take our messages");
             }
-        });
+        }); */
   
     }   
     
-    recoverPass(correo:string){
-        let token = tokenSecure.generar({correo})
-        let message={
-            from: this.server.correo,
-            to: correo,
-            subject: 'Recuperar Contraseña',
-            text: 'Para recuperar ve al siguiente enlace: <a href="http://localhost:4200/reset/'+token+'">click aquí</a>',            
-        }
-        this.transporter.sendMail(message)
+    async recoverPass(correo:string){
+        await tokenSecure.generar({correo})
+        .then(token => {
+            let message={
+                from: this.server.correo,
+                to: correo,
+                subject: 'Recuperar Contraseña',
+                html: 'Hola, has solicitado recuperar tu contraseña. Para recuperarla ve al siguiente enlace: <a href="http://localhost:4200/reset/'+token+'">click aquí</a>',            
+            }
+            this.transporter.sendMail(message)
+        })
     }
       
 

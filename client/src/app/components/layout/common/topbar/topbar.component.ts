@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Usuario } from 'src/app/models/Usuario';
 
 
 
@@ -9,6 +10,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class TopbarComponent implements OnInit {
   @Output() sideBar = new EventEmitter<any>();
+  @Input() user:Usuario
   
 
   constructor() { }

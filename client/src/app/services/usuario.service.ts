@@ -10,19 +10,27 @@ export class UserService {
   api_url
 
   constructor(private api:ServerService, private http:HttpClient) {
-    this.api_url = api.API_URI+'users';
+    this.api_url = api.API_URI+'usuario/';
   }
 
   getUsers(body){
-    return this.http.post(this.api_url+'/get',body, this.headers)
+    return this.http.post(this.api_url+'get',body, this.headers)
   }
 
   getFiltered(body){
-    return this.http.post(this.api_url+'/filtered',body, this.headers)
+    return this.http.post(this.api_url+'filtered',body, this.headers)
   }
 
   deleteUser(id){
-    return this.http.delete(this.api_url+'/'+id, this.headers);
+    return this.http.delete(this.api_url+id, this.headers);
+  }
+
+  actualizar(id,usuario){
+    return this.http.put(this.api_url+id, usuario, this.headers)
+  }
+
+  cambiarClave(id,pass){
+    return this.http.put(this.api_url+id+'/pass', pass, this.headers)
   }
 
 }

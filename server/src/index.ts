@@ -5,6 +5,7 @@ import cors from 'cors';
 import objetivoRoutes from './routes/objetivo.routes';
 import creenciaRoutes from './routes/creencia.routes';
 import authRoutes from './routes/auth.routes'
+import usuarioRoutes from './routes/usuario.routes'
 import db_init from './database/setup';
 
 class Server {
@@ -30,6 +31,7 @@ class Server {
         this.app.use('/api/objetivo', objetivoRoutes);
         this.app.use('/api/creencia', creenciaRoutes);
         this.app.use('/api/auth', authRoutes);
+        this.app.use('/api/usuario', usuarioRoutes);
     }
 
     start():void{

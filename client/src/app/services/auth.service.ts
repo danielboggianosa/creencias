@@ -34,7 +34,7 @@ export class AuthService implements OnDestroy {
   }
 
   reset(usuario){
-    return this.http.post(this.api_url+"reset", usuario)
+    return this.http.post(this.api_url+"reset", usuario, this.headers)
   }
 
   public isTokenValid():boolean {
@@ -53,12 +53,14 @@ export class AuthService implements OnDestroy {
         if(res){
             localStorage.setItem('token', token)
             let tokenPayLoad = decode(token)
-            sessionStorage.setItem('user.nombre', tokenPayLoad.nombre)
-            sessionStorage.setItem('user.apellido', tokenPayLoad.apellido)
-            sessionStorage.setItem('user.correo', tokenPayLoad.correo)
-            sessionStorage.setItem('user.imagen', tokenPayLoad.imagen)
-            sessionStorage.setItem('user.rol', tokenPayLoad.rol)
-            this.router.navigate(['/dashboard']);
+            sessionStorage.setItem('user.id', tokenPayLoad?.id)
+            sessionStorage.setItem('user.nombre', tokenPayLoad?.nombre)
+            sessionStorage.setItem('user.apellido', tokenPayLoad?.apellido)
+            sessionStorage.setItem('user.correo', tokenPayLoad?.correo)
+            sessionStorage.setItem('user.imagen', tokenPayLoad?.imagen)
+            sessionStorage.setItem('user.rol', tokenPayLoad?.rol)
+            if(sessionStorage.getItem('user.id')!=='undefined')
+              this.router.navigate(['/dashboard']);
         }
         else this.router.navigate(['/login']);
       }
@@ -70,6 +72,21 @@ export class AuthService implements OnDestroy {
     localStorage.clear();
     sessionStorage.clear();    
     this.router.navigate(['/login']);
+  }
+
+  sessionReset(token){
+    return new Promise((resolve,reject)=>{
+      let headers = {headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token)};
+      this.subs.sink = this.http.get(this.api_url+'validate', headers).subscribe(res=> {
+        if(res){
+            localStorage.setItem('token', token)
+            let tokenPayLoad = decode(token)
+            sessionStorage.setItem('user.correo', tokenPayLoad?.correo)
+            resolve(tokenPayLoad.correo)
+        }
+        else reject('no estás autorizado')
+      })
+    })
   }
 
 }

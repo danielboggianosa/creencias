@@ -27,6 +27,7 @@ class AuthController {
                     crypto_middleware_1.default.comparar(password, user.dataValues.password)
                         .then((result) => {
                         const usuario = {
+                            id: user.dataValues.id,
                             nombre: user.dataValues.nombre,
                             apellido: user.dataValues.apellido,
                             correo: user.dataValues.correo,
@@ -56,7 +57,6 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             const { nombre, apellido, correo, password, imagen } = req.body;
             let newUser;
-            let token;
             yield crypto_middleware_1.default.encriptar(password)
                 .then(hash => {
                 newUser = {
@@ -112,14 +112,10 @@ class AuthController {
             yield usuario_1.default.update({ password: hashed }, { where: { correo } })
                 .then((user) => {
                 if (user) {
-                    res.json({ success: true, user: {
-                            id: user.id,
-                            nombre: user.nombre,
-                            apellido: user.apellido,
-                            correo: user.correo,
-                            rol: user.rol,
-                            imagen: user.imagen
-                        } });
+                    res.json({
+                        success: true,
+                        message: 'Contraseña cambiada con éxito, ahora inicia sesión'
+                    });
                 }
                 else
                     res.json({ success: false, msg: "correo no registrado" });

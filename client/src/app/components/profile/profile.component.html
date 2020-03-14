@@ -1,0 +1,50 @@
+<h1>Perfil</h1>
+<p>Visualiza o edita los datos de tu Perfil</p>
+
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h5 class="m-0 font-weight-bold text-primary">Datos</h5>
+            </div>
+            <div class="card-body">
+                <app-forms #userForm
+                [myForm]="usuario"
+                [myFormFields]="userFormFields"
+                [buttonText]="userButtonText"
+                (sendForm)="userSendForm($event)"
+                (myInputChange)="userOnChange($event)"
+                ></app-forms>
+            </div>
+        </div>
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h5 class="m-0 font-weight-bold text-primary">Cambiar Contraseña</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger" *ngIf="passMessage">{{passMessage}} <i class="fa fa-times float-right" (click)="passMessage=null" style="cursor: pointer;"></i></div>
+                <app-forms #passForm
+                [myForm]="pass"
+                [myFormFields]="passFormFields"
+                [buttonText]="passButtonText"
+                (sendForm)="passSendForm($event)"
+                (myInputChange)="passOnChange($event)"
+                ></app-forms>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h5 class="m-0 font-weight-bold text-primary">Vista</h5>
+            </div>
+            <div class="card-image">
+                <img src="{{usuario.imagen}}" class="w-100" alt="">
+            </div>
+            <div class="card-body">
+                <h4 class="text-primary text-center">{{usuario.nombre}} {{usuario.apellido}}</h4>
+                <p><b>correo: </b>{{usuario.correo}}</p>
+            </div>
+        </div>
+    </div>
+</div>

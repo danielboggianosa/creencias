@@ -19,11 +19,7 @@ export class ResetComponent implements OnInit {
   constructor(private url: ActivatedRoute, private authService:AuthService, private router:Router) { }
 
   ngOnInit(): void {
-    this.usuario.correo = this.url.snapshot.paramMap.get('token')
-    if(!this.usuario.correo){
-      this.router.navigateByUrl('/register');
-      alert('No estaás autorizado')
-    }
+    this.verifySession()
   }
 
   onSubmit(){
@@ -31,7 +27,8 @@ export class ResetComponent implements OnInit {
       this.subs.sink = this.authService.reset(this.usuario).subscribe(
         res=>{
           if(res['success']){
-            this.router.navigateByUrl('/login');
+            alert(res['message'])
+            this.authService.sessionDestroy()
           }
           else
             alert('Hubo un error, por favor intenta de nuevo')
@@ -45,6 +42,15 @@ export class ResetComponent implements OnInit {
     }
     else
       delete this.passMessage;
+  }
+
+  verifySession(){
+    this.authService.sessionReset(this.url.snapshot.paramMap.get('token'))
+    .then(correo=>this.usuario.correo = correo)
+    .catch(msg=>{
+      alert(msg)
+      this.router.navigateByUrl('/login');
+    })
   }
 
 }

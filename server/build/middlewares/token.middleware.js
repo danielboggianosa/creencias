@@ -23,7 +23,6 @@ class TokenSecure {
     proteger(req, res, next) {
         const secret = env_1.default.jwt_secret;
         const bearerHeader = req.headers['authorization'];
-        console.log('my Secret', secret);
         if (typeof bearerHeader !== 'undefined') {
             const token = bearerHeader.split(' ')[1];
             jsonwebtoken_1.default.verify(token, secret, (err, data) => {

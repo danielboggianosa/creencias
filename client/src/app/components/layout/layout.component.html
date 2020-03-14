@@ -3,7 +3,7 @@
     <app-sidebar #sidebar></app-sidebar>
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-            <app-topbar (sideBar)="toggleSideBar()"></app-topbar>
+            <app-topbar (sideBar)="toggleSideBar()" [user]=user></app-topbar>
             <!-- Begin Page Content -->
         <div class="container-fluid">
             <router-outlet></router-outlet>
