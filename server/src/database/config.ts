@@ -1,9 +1,11 @@
+import env from '../env'
+
 export default {
-    name:"creencias",
-    user:"root",
-    pass:"",
+    name: env.database.name, //enviroment variables tomadas de una archivo ignorado para git
+    user: env.database.user, //En producción se debe crear un archivo que contenga todas la configuraciones
+    pass: env.database.pass,
     connection:{
-        host:"localhost",
+        host: env.database.host,
         logging: false,
         dialect: "mysql",
         dialectOptions: {

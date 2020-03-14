@@ -1,11 +1,12 @@
 import bcrypt, { hash } from 'bcrypt'
 import { reject, resolve } from 'bluebird';
+import env from '../env';
 
 class CryptoSecure {
 
     public encriptar(password:string){
         return new Promise((resolve,reject) => {
-            bcrypt.hash(password,10,(err,hash)=>{
+            bcrypt.hash(password,env.hash_rounds,(err,hash)=>{
                 if(hash) resolve(hash)
                 else reject(err)
             })
