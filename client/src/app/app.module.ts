@@ -24,6 +24,7 @@ import { PaginatorComponent } from './components/datatable/paginator/paginator.c
 import { ReportsComponent } from './components/datatable/reports/reports.component';
 import { MatSortModule } from '@angular/material/sort';
 import { ProfileComponent } from './components/profile/profile.component';
+import { CreenciaEditarComponent } from './components/creencia/creencia-editar/creencia-editar.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     PaginatorComponent,
     ReportsComponent,
     DataTableComponent,
-    ProfileComponent
+    ProfileComponent,
+    CreenciaEditarComponent
   ],
   imports: [
     BrowserModule,

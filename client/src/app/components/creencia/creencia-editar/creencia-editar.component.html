@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismissAll()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-forms
+        [myForm]="creencia"
+        [myFormFields]="creenciaFields"
+        (sendForm)="editar($event)"
+        [buttonText]="buttonText"
+    ></app-forms>
+  </div>

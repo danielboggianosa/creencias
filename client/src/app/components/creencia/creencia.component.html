@@ -15,3 +15,10 @@
 (deleteData)="delete($event)"
 (updateData)="update($event)"
 ></app-data-table>
+
+<ng-template let-modal #editar>
+    <app-creencia-editar
+    [creencia]="creencia"
+    (actualizar)="actualizar($event)"
+    ></app-creencia-editar>
+</ng-template>

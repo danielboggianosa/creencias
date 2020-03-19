@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SubSink } from 'subsink';
 import { CreenciaService } from 'src/app/services/creencia.service';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-creencia',
@@ -10,6 +11,7 @@ import * as moment from 'moment';
   styles: []
 })
 export class CreenciaComponent implements OnInit {
+  @ViewChild('editar',{static:false}) editar;
   subs = new SubSink
   pageSize: number = 10;
   field:string = 'id';
@@ -27,8 +29,9 @@ export class CreenciaComponent implements OnInit {
     {id:'4', key:'updatedAt', title:'ACTUALIZADO',   visible:false},
     {id:'0', key:'options',   title:'OPTIONS',  visible:true, options:{delete:true,edit:true,select:false,unselect:false}},
   ]
+  creencia;
 
-  constructor(private creenciaService:CreenciaService) { }
+  constructor(private creenciaService:CreenciaService, private ngbModal:NgbModal) { }
 
   ngOnInit(): void {
     this.loadData({page:0,size:this.pageSize,field:this.field,order:this.order,value:this.filterValue,attributes:this.attributes});
@@ -80,7 +83,21 @@ export class CreenciaComponent implements OnInit {
   }
 
   update(e){
+    this.creencia = this.dataSource.data.filter(d=>d.id == e)[0];
+    this.ngbModal.open(this.editar)
     console.log(e)
   }
+
+  actualizar(e){
+    delete e.updatedAt;
+    delete e.deletedAt;
+    delete e.createdAt;
+    this.subs.sink = this.creenciaService.actualizar(e.id, e).subscribe(res=>{
+      if(res['success'])
+        alert(res['message'])
+    })
+  }
+
+
 
 }
