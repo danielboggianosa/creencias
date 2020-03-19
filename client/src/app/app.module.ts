@@ -25,6 +25,7 @@ import { ReportsComponent } from './components/datatable/reports/reports.compone
 import { MatSortModule } from '@angular/material/sort';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CreenciaEditarComponent } from './components/creencia/creencia-editar/creencia-editar.component';
+import { ObjetivoEditarComponent } from './components/objetivo/objetivo-editar/objetivo-editar.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { CreenciaEditarComponent } from './components/creencia/creencia-editar/c
     ReportsComponent,
     DataTableComponent,
     ProfileComponent,
-    CreenciaEditarComponent
+    CreenciaEditarComponent,
+    ObjetivoEditarComponent
   ],
   imports: [
     BrowserModule,

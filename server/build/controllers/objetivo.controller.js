@@ -39,6 +39,20 @@ class ObjetivoController {
             });
         });
     }
+    //CREATE BULK
+    createAsociado(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield objetivo_1.default.create(req.body, {
+                include: [{ model: creencia_1.default, as: "Creencias" }]
+            })
+                .then((objetivo) => {
+                res.json({ success: true, message: 'Objetivos y creencias creados correctamente', data: objetivo });
+            })
+                .catch((error) => {
+                res.json({ success: false, message: 'Hubo un problema al crear', error: error });
+            });
+        });
+    }
     //ASOCIAR OBJETIVOS CON CREENCIAS
     asociar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -160,7 +174,7 @@ class ObjetivoController {
                 .then((objetivo) => {
                 res.json({
                     success: true,
-                    message: 'Objetivo actualizada correctamente',
+                    message: 'Objetivo actualizado correctamente',
                     data: objetivo
                 });
             })

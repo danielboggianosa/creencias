@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material/table';
 import { ObjetivoService } from 'src/app/services/objetivo.service';
 import { SubSink } from 'subsink';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-objetivo',
@@ -27,8 +28,10 @@ export class ObjetivoComponent implements OnInit, OnDestroy {
     {id:'4', key:'updatedAt', title:'ACTUALIZADO',   visible:false},
     {id:'0', key:'options',   title:'OPTIONS',  visible:true, options:{delete:true,edit:true,select:false,unselect:false}},
   ]
+  objetivo: any;
+  @ViewChild('editar',{static:false}) editar;
 
-  constructor(private objetivoService:ObjetivoService) { }
+  constructor(private objetivoService:ObjetivoService, private ngbModal:NgbModal) { }
 
   ngOnInit(): void {
     this.loadData({page:null,size:null,field:null,order:null,value:null,attributes:null});
@@ -80,7 +83,19 @@ export class ObjetivoComponent implements OnInit, OnDestroy {
   }
 
   update(e){
+    this.objetivo = this.dataSource.data.filter(d=>d.id == e)[0];
+    this.ngbModal.open(this.editar)
     console.log(e)
+  }
+
+  actualizar(e){
+    delete e.updatedAt;
+    delete e.deletedAt;
+    delete e.createdAt;
+    this.subs.sink = this.objetivoService.actualizar(e.id, e).subscribe(res=>{
+      if(res['success'])
+        alert(res['message'])
+    })
   }
 
 }

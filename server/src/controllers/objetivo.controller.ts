@@ -26,6 +26,18 @@ class ObjetivoController{
             res.json({success:false, message: 'Hubo un problema al crear', error: error})
         })
     }
+    //CREATE BULK
+    public async createAsociado(req:Request, res:Response): Promise<void>{
+        await Objetivo.create(req.body, {
+            include:[{model:Creencia,as:"Creencias"}]
+        })
+        .then((objetivo: any)=>{
+            res.json({success: true, message: 'Objetivos y creencias creados correctamente', data: objetivo});
+        })
+        .catch((error: any)=>{
+            res.json({success:false, message: 'Hubo un problema al crear', error: error})
+        })
+    }
 
     //ASOCIAR OBJETIVOS CON CREENCIAS
     public async asociar(req:Request, res:Response): Promise<void>{
@@ -143,7 +155,7 @@ class ObjetivoController{
         .then((objetivo: any)=>{
             res.json({
                 success: true, 
-                message: 'Objetivo actualizada correctamente', 
+                message: 'Objetivo actualizado correctamente', 
                 data: objetivo
             });
         })
